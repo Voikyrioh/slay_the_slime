@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref} from "vue";
+import {computed, ref, useTemplateRef} from "vue";
 
 enum States {
   normal,
@@ -11,6 +11,7 @@ enum States {
 
 const {slimeClick} = defineProps<{slimeClick: () => void}>();
 const state = ref<States>(States.normal);
+const hitbox = useTemplateRef('hitbox');
 
 const face = computed(() => {
   switch (state.value) {
@@ -35,7 +36,11 @@ function induceFear() {
 }
 
 function leaveAlone() {
-  state.value = States.normal;
+  setTimeout(() => {
+    if (state.value !== States.normal && !hitbox.value?.matches(':hover')) {
+      state.value = States.normal
+    }
+  }, 3000);
 }
 
 function hurtHim(): void {
@@ -44,7 +49,9 @@ function hurtHim(): void {
   setTimeout(() => {
     state.value = States.crying;
     setTimeout(() => {
-      if (state.value === States.crying) leaveAlone()
+      if (state.value === States.crying && !hitbox.value?.matches(':hover')) {
+        state.value = States.normal;
+      }
     }, 5000);
   }, 600)
   slimeClick();
@@ -53,37 +60,63 @@ function hurtHim(): void {
 </script>
 
 <template>
-  <button
-      @pointerdown="hurtHim"
-      @mouseenter="induceFear"
-      @mouseleave="leaveAlone"
-      :class="{
+  <div id="slime-container">
+    <button
+        ref="hitbox"
+        @pointerdown="hurtHim"
+        @mouseenter="induceFear"
+        @mouseleave="leaveAlone"
+        id="hitbox"
+    >
+      <span id="slime" :class="{
         owo: state === States.fear,
         trembling: state === States.trembling,
         hurt: state === States.hurt,
-      }"
-      id="slime"
-  >
-    {{face}}
-  </button>
+      }">{{face}}</span>
+    </button>
+  </div>
 </template>
 
 <style scoped>
 
-button {
-  background-color: var(--slime-color);
-  border: solid var(--slime-border);
-  color: var(--slime-border);
-  border-radius: 128px 128px 64px 64px;
-  height: 160px;
-  width: 180px;
-  font-size: 3rem;
-  padding: 0;
-  text-align: center;
-  transition: transform cubic-bezier(0.1, 0.8, 0.3, 2.3) 0.4s;
+#slime-container {
+  position: relative;
 }
 
-button:hover {
+#hitbox {
+  height: 200px;
+  width: 200px;
+  background: none;
+  border: none;
+  display: block;
+  position: absolute;
+  bottom: 100px;
+  left: calc(50% - (180px / 2));
+  border-radius: var(--slime-border-radius);
+}
+
+#slime {
+  display: block;
+
+  height: 160px;
+  width: 180px;
+
+  background-color: var(--slime-color);
+  color: var(--slime-face-color);
+  border: var(--slime-border);
+
+
+  transform-origin: bottom center;
+  transition: transform cubic-bezier(0.1, 0.8, 0.3, 2.3) 0.4s;
+  box-shadow: 0 20px 10px rgba(0,0,0,0.8);
+
+  border-radius: var(--slime-border-radius);
+  font-size: 3rem;
+  padding: 0;
+  line-height: 3;
+}
+
+#hitbox:hover {
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='50' height='60' viewport='0 0 100 100' style='fill:black;font-size:30px;'><text y='50%'>⚔️</text></svg>") 16 0,auto;
 }
 
@@ -116,46 +149,34 @@ button:hover {
 
 @keyframes owo {
   from {
-    transform: scale(1);
-    font-size: 3rem;
-    height: 160px;
-    width: 180px;
+    transform: scaleX(1) scaleY(1);
   }
   50% {
-    transform: scale(1.3);
-    font-size: 2rem;
-    height: 160px;
-    width: 120px;
+    transform: scaleX(1.1) scaleY(1.6);
   }
   to {
-    transform: scale(1);
-    font-size: 3rem;
-    height: 160px;
-    width: 180px;
+    transform: scaleX(1) scaleY(1);
   }
 }
 
 @keyframes ouch {
   from {
     background-color: var(--slime-color);
-    border: solid var(--slime-border);
-    color: var(--slime-border);
-    height: 160px;
-    width: 180px;
+    border: var(--slime-border);
+    color: var(--slime-face-color);
+    transform: scaleX(1) scaleY(1);
   }
   50% {
-    background-color: var(--slime-hurt);
-    border: solid var(--slime-hurt-border);
-    color: var(--slime-hurt-border);
-    height: 120px;
-    width: 200px;
+    background-color: var(--slime-hurt-color);
+    border: solid var(--slime-hurt-border-color);
+    color: var(--slime-hurt-border-color);
+    transform: scaleX(1.1) scaleY(0.6);
   }
   to {
     background-color: var(--slime-color);
-    border: solid var(--slime-border);
-    color: var(--slime-border);
-    height: 160px;
-    width: 180px;
+    border: var(--slime-border);
+    color: var(--slime-face-color);
+    transform: scaleX(1) scaleY(1);
   }
 }
 </style>
