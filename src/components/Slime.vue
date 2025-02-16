@@ -1,30 +1,47 @@
 <script setup lang="ts">
-import {computed, ref, useTemplateRef} from "vue";
+import {computed, onMounted, ref, useTemplateRef} from "vue";
 
 enum States {
-  normal,
-  fear,
-  trembling,
-  hurt,
+  blink,
   crying,
+  outraged,
+  dead,
+  fear,
+  hurt,
+  normal,
+  trembling,
 }
 
 const {slimeClick} = defineProps<{slimeClick: () => void}>();
 const state = ref<States>(States.normal);
 const hitbox = useTemplateRef('hitbox');
+const hitCount = ref<number>(0);
+
+onMounted(
+  () => {
+    setInterval(() => {
+      if(hitCount.value > 0) hitCount.value -= 1;
+    }, 2000);
+  })
 
 const face = computed(() => {
   switch (state.value) {
     case States.fear:
     case States.trembling:
-      return 'OwO';
+      return '◉﹏◉';
     case States.hurt:
-      return '>w<';
+      return '＞︿＜';
+    case States.blink:
+      return '- ω -';
+    case States.outraged:
+      return '° Д°';
     case States.crying:
-      return 'T w T';
+      return '╥ ︿ ╥';
+    case States.dead:
+      return 'X︿X';
     case States.normal:
     default:
-      return '^o^'
+      return '•̀ ω •́';
   }
 })
 
@@ -38,19 +55,27 @@ function induceFear() {
 function leaveAlone() {
   setTimeout(() => {
     if (state.value !== States.normal && !hitbox.value?.matches(':hover')) {
-      state.value = States.normal
+      goToNormal();
     }
   }, 3000);
+}
+
+function goToNormal() {
+  state.value = States.blink;
+  setTimeout(() => {
+    state.value = States.normal;
+  }, 300);
 }
 
 function hurtHim(): void {
   if (state.value === States.hurt) return;
   state.value = States.hurt;
+  hitCount.value += 1;
   setTimeout(() => {
-    state.value = States.crying;
+    state.value = hitCount.value > 10 ? States.crying: States.outraged;
     setTimeout(() => {
-      if (state.value === States.crying && !hitbox.value?.matches(':hover')) {
-        state.value = States.normal;
+      if ([States.crying, States.outraged].includes(state.value) && !hitbox.value?.matches(':hover')) {
+        goToNormal();
       }
     }, 5000);
   }, 600)
@@ -114,6 +139,18 @@ function hurtHim(): void {
   font-size: 3rem;
   padding: 0;
   line-height: 3;
+}
+
+/* Small reflection on slime*/
+#slime:after {
+  content: '';
+  position: absolute;
+  display: block;
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: rotate(20deg) translate(36px, -160px) skew(-28deg, 1deg);
+  width: 50px;
+  height: 20px;
+  border-radius: 35% / 50%;
 }
 
 #hitbox:hover {

@@ -104,9 +104,10 @@ menu {
   display: block;
   grid-area: m;
   margin: 0;
-  padding: 8px;
+  padding: 0;
   background: #2b3134;
-  border: solid 2px #d0cdca;
+  border: solid 2px #212121;
+  border-radius: 10px;
   box-shadow: -10px 10px 5px rgba(0,0,0,0.4);
   z-index: 2;
 }
