@@ -23,14 +23,14 @@ defineExpose({
   display: flex;
   justify-content: space-around;
   width: fit-content;
-  transition: width cubic-bezier(0.1, 0.8, 0.3, 2.3) 0.4s;
+  transition: width var(--slime-animation-style);
 }
 
 #counter {
   font-size: 3rem;
   line-height: 1.75;
   width: fit-content;
-  transition: width cubic-bezier(0.1, 0.8, 0.3, 2.3) 0.4s;
+  transition: width var(--slime-animation-style);
   font-family: 'Press Start 2P', cursive;
   color: var(--slime-color);
   -webkit-text-stroke: 2px var(--slime-border-color);

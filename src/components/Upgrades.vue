@@ -12,11 +12,14 @@ function selectCategory(category: UpgradeCategory) {
 const upgradesWeapons: UpgradeType[] = [
   {
     desc: "chopchop does what any chopchop would do, like chopping wood or innocent baby slimes and their family...",
-    image: "/upgrades/chopchop.png",
+    image: "/upgrades/chopchop.webp",
     imageAlt: "Big axe with slime residue",
     name: "Chopchop",
     price: 25,
-    id: 1
+    id: 1,
+    buyCallback: (id: number) => {
+      console.log(id);
+    }
   }
 ];
 
@@ -37,7 +40,7 @@ const availableCategoryUpgrades = ref<Record<UpgradeCategory, UpgradeType[]>>({
   </div>
   <div id="false-shop-header">
     <h2>Welcome to Mall a' Slime !</h2>
-    <span>here you can buy anything you want to perfectly massacre those naughty slimes.</span>
+    <span>Here, you can buy anything you need to perfectly massacre those naughty slimes.</span>
     <div id="false-shop-header-button-container">
       <button
           v-for="category of Object.keys(availableCategoryUpgrades)"
@@ -54,6 +57,7 @@ const availableCategoryUpgrades = ref<Record<UpgradeCategory, UpgradeType[]>>({
       :image-alt=up.imageAlt
       :price=up.price
       :id=up.id
+      :buy-callback=up.buyCallback
   />
 </div>
 </template>
@@ -63,25 +67,32 @@ const availableCategoryUpgrades = ref<Record<UpgradeCategory, UpgradeType[]>>({
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  --mall-a-slime-main-color: #005e0f;
+  --mall-a-slime-text-color: #6bde7b;
+  --mall-a-slime-text-light-color: #d6f6db;
+  --mall-a-slime-bg-color: #c2ffc9;
+  --mall-a-slime-accent-color: #2ea840;
+  --mall-a-slime-border-color: #6bde7b;
+  --mall-a-slime-accent-border-color: #6bde7b;
+
+  background-color: var(--mall-a-slime-bg-color);
+  height: 100%;
 }
 
 #false-shop-header {
   height: 80px;
-  background-color: #363636;
+  background-color: var(--mall-a-slime-main-color);
   margin-bottom: 48px;
-  border-bottom: 1px solid #242424;
+  border-bottom: 1px solid var(--mall-a-slime-border-color);
+  color: var(--mall-a-slime-text-color);
   >h2 {
     font-family: 'Press Start 2P', cursive;
     font-size: 1.6rem;
     font-weight: bold;
     margin: 4px;
-    color: var(--slime-color);
-    -webkit-text-stroke: 1px var(--slime-border-color);
-    text-stroke: 1px var(--slime-border-color);
   }
   >span {
-    color: #c7c7c7;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-style: italic;
   }
   >#false-shop-header-button-container {
@@ -93,12 +104,23 @@ const availableCategoryUpgrades = ref<Record<UpgradeCategory, UpgradeType[]>>({
       width: 128px;
       height: 32px;
       font-size: 1rem;
-      border-radius: 0 0 25px 25px;
-      background-color: #242424;
+      border-radius: 0 0 8px 8px;
+      background-color: var(--mall-a-slime-border-color);
+      color: var(--mall-a-slime-text-light-color);
       border: none;
+      transition: var(--slime-animation-style), background-color cubic-bezier(0.3, 0.8, 0.3, 1.3) 0.4s;
+      &:hover {
+        transform: scaleX(1.1);
+        height: 34px;
+      }
+      &:active {
+        transform: scaleX(1);
+        height: 32px;
+      }
       &.active {
-        background-color: #363636;
-        border: 1px solid #242424;
+        background-color: var(--mall-a-slime-main-color);
+        color: var(--mall-a-slime-text-light-color);
+        border: 1px solid var(--mall-a-slime-border-color);
         border-top: none;
       }
       &:hover {

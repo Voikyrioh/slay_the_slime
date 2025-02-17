@@ -132,7 +132,7 @@ function hurtHim(): void {
 
 
   transform-origin: bottom center;
-  transition: transform cubic-bezier(0.1, 0.8, 0.3, 2.3) 0.4s;
+  transition: transform var(--slime-animation-style);
   box-shadow: 0 20px 10px rgba(0,0,0,0.8);
 
   border-radius: var(--slime-border-radius);
@@ -158,11 +158,11 @@ function hurtHim(): void {
 }
 
 .owo {
-  animation: owo cubic-bezier(0.1, 0.8, 0.3, 2.3) 0.4s both;
+  animation: owo var(--slime-animation-style) both;
 }
 
 .hurt {
-  animation: ouch cubic-bezier(0.1, 0.8, 0.3, 2.3) 0.4s ;
+  animation: ouch var(--slime-animation-style) ;
 }
 
 .trembling {

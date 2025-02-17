@@ -39,6 +39,8 @@ function handleClick() {
   --slime-border: solid 5px var(--slime-border-color);
   --slime-border-radius: 128px 128px 64px 64px;
   --bg-img-size: 96px;
+
+  --slime-animation-style:  cubic-bezier(0.1, 0.8, 0.3, 2.3) 0.4s
 }
 #game {
   max-width: 1920px;
