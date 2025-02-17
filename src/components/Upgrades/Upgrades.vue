@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Upgrade from "./Upgrade.vue";
-import type { Upgrade as UpgradeType } from "./Upgrade.type";
+import type { Upgrade as UpgradeType } from "./Upgrade.type.ts";
 import {ref} from "vue";
 
 type UpgradeCategory = "Weapons"| "Upgrades"| "Skins";

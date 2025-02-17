@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import SlimeBall from "./SlimeBall.vue";
+import SlimeBall from "./assets/SlimeBall.vue";
 
 const slimeBalls = ref(0)
 function handleUserClickEvent() {

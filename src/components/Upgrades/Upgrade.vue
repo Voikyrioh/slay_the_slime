@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SlimeBall from "./SlimeBall.vue";
+import SlimeBall from "../assets/SlimeBall.vue";
 import type {Upgrade} from "./Upgrade.type.ts";
 
 const {image, imageAlt, name, desc, price} = defineProps<Upgrade>()

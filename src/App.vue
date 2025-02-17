@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Slime from './components/Slime.vue'
+import Slime from './components/Slime/Slime.vue'
 import Game from "./components/Game.vue";
 import {useTemplateRef} from "vue";
-import Upgrades from "./components/Upgrades.vue";
+import Upgrades from "./components/Upgrades/Upgrades.vue";
 type GameInstance = InstanceType<typeof Game>
 
 const gameComponent = useTemplateRef<GameInstance>('gameComponent');
