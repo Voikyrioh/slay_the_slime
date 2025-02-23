@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Upgrade from "./Upgrade.vue";
 import {computed, ref} from "vue";
-import type { Upgrade as UpgradeType} from "../../core/classes/Upgrade.ts";
+import type ShopItem from "../../core/classes/ShopItem.ts";
 import {game} from "../../core/Game.ts";
 
 type UpgradeCategory = "Weapons"| "Upgrades"| "Skins";
@@ -21,7 +21,7 @@ const itemList = computed(() => {
       return [];
   }
 });
-const availableCategoryUpgrades = ref<Record<UpgradeCategory, UpgradeType[]>>({
+const availableCategoryUpgrades = ref<Record<UpgradeCategory, ShopItem[]>>({
   "Weapons": game.value?.shop.availableWeapons,
   "Upgrades": game.value?.shop.availableUpgrades,
   "Skins": []
