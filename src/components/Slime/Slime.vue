@@ -3,6 +3,7 @@ import {computed, onMounted, ref, useTemplateRef} from "vue";
 import {OngoingState, SlimeHurtKeyframe, SlimeSurpriseKeyframe, SlimeTrembleKeyframe} from "./Slime.tools.ts";
 import type { SlimeElementKeyframes } from "./Slime.tools.ts";
 import { States } from "./Slime.tools.ts";
+import {game} from "../../core/Game.ts";
 
 const animations: Record<SlimeElementKeyframes, { keyFrames: Keyframe[], options: KeyframeAnimationOptions }> = {
   'hit': SlimeHurtKeyframe,
@@ -10,10 +11,7 @@ const animations: Record<SlimeElementKeyframes, { keyFrames: Keyframe[], options
   'fear': SlimeSurpriseKeyframe
 };
 
-const {slimeClick} = defineProps<{slimeClick: () => void}>();
-const hitbox = useTemplateRef('hitbox');
 const slime = useTemplateRef('slime');
-
 const hitCount = ref<number>(0);
 const currentAnimation = ref<Animation>();
 const ongoingState = ref<OngoingState>();
@@ -83,7 +81,7 @@ function hurtHim(): void {
       setState(States.outraged, 1000, true);
     }
   });
-  slimeClick();
+  game.value?.hitSlime();
 }
 
 function induceFear() {
@@ -101,9 +99,7 @@ function induceFear() {
 
 <template>
   <div id="slime-container">
-    {{hitCount}}
     <button
-        ref="hitbox"
         @pointerdown="hurtHim"
         @mouseenter="induceFear"
         id="hitbox"
@@ -149,6 +145,7 @@ function induceFear() {
   box-shadow: 0 20px 10px rgba(0,0,0,0.8);
 
   border-radius: var(--slime-border-radius);
+  font-family: Tahoma, cursive;
   font-size: 3rem;
   padding: 0;
   line-height: 3;

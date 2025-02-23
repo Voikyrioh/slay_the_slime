@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Upgrade from "./Upgrade.vue";
-import type { Upgrade as UpgradeType } from "./Upgrade.type.ts";
-import {ref} from "vue";
+import {computed, ref} from "vue";
+import type { Upgrade as UpgradeType} from "../../core/classes/Upgrade.ts";
+import {game} from "../../core/Game.ts";
 
 type UpgradeCategory = "Weapons"| "Upgrades"| "Skins";
 
@@ -9,24 +10,20 @@ function selectCategory(category: UpgradeCategory) {
   selectedCategory.value = category;
 }
 
-const upgradesWeapons: UpgradeType[] = [
-  {
-    desc: "chopchop does what any chopchop would do, like chopping wood or innocent baby slimes and their family...",
-    image: "/upgrades/chopchop.webp",
-    imageAlt: "Big axe with slime residue",
-    name: "Chopchop",
-    price: 25,
-    id: 1,
-    buyCallback: (id: number) => {
-      console.log(id);
-    }
-  }
-];
-
 const selectedCategory = ref<UpgradeCategory>("Weapons");
+const itemList = computed(() => {
+  switch (selectedCategory.value) {
+    case "Weapons":
+      return game.value?.shop.availableWeapons;
+    case "Upgrades":
+      return game.value?.shop.availableUpgrades;
+    case "Skins":
+      return [];
+  }
+});
 const availableCategoryUpgrades = ref<Record<UpgradeCategory, UpgradeType[]>>({
-  "Weapons": upgradesWeapons,
-  "Upgrades": [],
+  "Weapons": game.value?.shop.availableWeapons,
+  "Upgrades": game.value?.shop.availableUpgrades,
   "Skins": []
 });
 
@@ -49,24 +46,27 @@ const availableCategoryUpgrades = ref<Record<UpgradeCategory, UpgradeType[]>>({
       >{{ category }}</button>
     </div>
   </div>
-  <Upgrade
-      v-for="up of availableCategoryUpgrades[selectedCategory]"
-      :name=up.name
-      :image=up.image
-      :desc=up.desc
-      :image-alt=up.imageAlt
-      :price=up.price
-      :id=up.id
-      :buy-callback=up.buyCallback
-  />
+  <div id="upgrades-container">
+    <Upgrade
+        v-for="up of itemList"
+        :name=up.name
+        :image=up.imageUrl
+        :desc=up.description
+        :image-alt=up.imageAlt
+        :price=up.cost
+        :id=up.id
+    />
+  </div>
 </div>
 </template>
 
 <style scoped>
 #upgrades {
+  position: relative;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  justify-content: start;
+  overflow: hidden;
   --mall-a-slime-main-color: #005e0f;
   --mall-a-slime-text-color: #6bde7b;
   --mall-a-slime-text-light-color: #d6f6db;
@@ -76,7 +76,11 @@ const availableCategoryUpgrades = ref<Record<UpgradeCategory, UpgradeType[]>>({
   --mall-a-slime-accent-border-color: #6bde7b;
 
   background-color: var(--mall-a-slime-bg-color);
-  height: 100%;
+  min-height: 860px;
+  margin: 0;
+  padding: 0;
+  border-radius: 4px;
+  border: #242424;
 }
 
 #false-shop-header {
@@ -95,11 +99,12 @@ const availableCategoryUpgrades = ref<Record<UpgradeCategory, UpgradeType[]>>({
     font-size: 0.9rem;
     font-style: italic;
   }
+
   >#false-shop-header-button-container {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    margin-top: 10px;
+    margin-top: 9.5px;
     >button {
       width: 128px;
       height: 32px;
@@ -128,6 +133,12 @@ const availableCategoryUpgrades = ref<Record<UpgradeCategory, UpgradeType[]>>({
       }
     }
   }
+}
+
+#upgrades-container {
+  overflow-y: auto;
+  min-height: calc(860px - 193px);
+  max-height: calc(860px - 193px);
 }
 
 #navigator-like {

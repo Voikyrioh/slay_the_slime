@@ -5,5 +5,4 @@ export type Upgrade = {
     desc:string;
     price: number
     id: number;
-    buyCallback: (id: number) => void;
 }

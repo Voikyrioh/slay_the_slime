@@ -1,18 +1,23 @@
 <script setup lang="ts">
 import SlimeBall from "../assets/SlimeBall.vue";
 import type {Upgrade} from "./Upgrade.type.ts";
+import {game} from "../../core/Game.ts";
 
-const {image, imageAlt, name, desc, price} = defineProps<Upgrade>()
+const {image, imageAlt, name, desc, price, id} = defineProps<Upgrade>()
+
+function buyWeapon() {
+  game.value?.buyItem(id);
+}
 </script>
 
 <template>
-  <div class="upgrade">
+  <div :class="{'upgrade': true, 'disabled': price > game.getMoney()}">
     <span class="upgrade-name">{{name}}</span>
     <img class="upgrade-image" :src=image :alt=imageAlt />
     <p class="upgrade-info">
       {{desc}}
     </p>
-    <button class="upgrade-price"><span>Buy for only</span> <b>{{price}}</b><SlimeBall/></button>
+    <button class="upgrade-price" @click="buyWeapon()"><span>Buy for only</span> <b>{{price}}</b><SlimeBall/></button>
   </div>
 </template>
 
@@ -43,7 +48,7 @@ const {image, imageAlt, name, desc, price} = defineProps<Upgrade>()
   height: 64px;
   align-self: center;
   margin: 0 8px;
-  transform: scale(1.6) rotate(40deg);
+  transform: scale(1.6) rotate(40deg) translateX(16px);;
 }
 
 .upgrade-name {
