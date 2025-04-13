@@ -85,6 +85,7 @@ export enum States {
     hurt,
     normal,
     trembling,
+    cute,
 }
 
 export class OngoingState {

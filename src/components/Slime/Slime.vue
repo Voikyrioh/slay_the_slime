@@ -48,6 +48,8 @@ const face = computed(() => {
       return '╥ ︿ ╥';
     case States.dead:
       return 'X︿X';
+    case States.cute:
+      return '๑ꈍヮꈍ๑';
     case States.normal:
     default:
       return '•̀ ω •́';
