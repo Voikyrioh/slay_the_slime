@@ -21,6 +21,7 @@ const itemList = computed(() => {
       return [];
   }
 });
+
 const availableCategoryUpgrades = ref<Record<UpgradeCategory, ShopItem[]>>({
   "Weapons": game.value?.shop.availableWeapons,
   "Upgrades": game.value?.shop.availableUpgrades,
