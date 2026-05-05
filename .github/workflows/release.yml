@@ -19,6 +19,3 @@ jobs:
       app_name: slay_the_slime
       bump_type: ${{ inputs.bump_type }}
     secrets: inherit
-    permissions:
-      contents: write
-      packages: write
